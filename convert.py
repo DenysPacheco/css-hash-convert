@@ -4,10 +4,11 @@ import re
 from os import listdir
 from os.path import isfile, join
 
+
 def read(file):
     with open(file, 'r') as f:
-            lines = f.readlines()
-            f.close()
+        lines = f.readlines()
+        f.close()
     return lines
 
 
