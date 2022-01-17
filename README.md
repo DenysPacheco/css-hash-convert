@@ -5,9 +5,9 @@ It was inspired on Google's approach to minimize classes names to faster load we
 
 ## What it does
 
-- [x] Make a hash out of css classes and apply for all html
-- [x] Create `hashed` files with the output
-- [x] Auto change the css name of the link tag 
+- [x] Make a hash out of css classes names and apply for all the html's
+- [x] Create `-hashed` file with the output
+- [x] Auto change the css names of the link tags
 
 ## Usage
 
@@ -15,7 +15,7 @@ Just put the script/files on the top folder and execute.
 
 It will search all files with the extensions marked on the configuration file.
 
-It will give the output with `foo-hashed.html`
+It will give the output with `foo-hashed.html` and `foo-hashed.css`
 
 ### Configure
 
