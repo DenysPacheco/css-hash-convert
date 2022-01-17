@@ -1,0 +1,13 @@
+{
+    "filesSearch": [
+        ".html",
+        ".css"
+    ],
+    "filesIgnore": [
+        "-hashed"
+    ],
+    "extCopy": "-hashed",
+    "patternCSS": "\\.-?[_a-zA-Z]+[_a-zA-Z0-9-]*\\s*\\{",
+    "patternHTML": "class[\t]*=[\t]*\"[^\"]+",
+    "hashLength": 6
+}

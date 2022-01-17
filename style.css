@@ -1,0 +1,17 @@
+.center-text {
+    text-align: center !important;
+}
+
+.di-4 {
+    font-size: calc(1.475rem + 2.7vw);
+    font-weight: 300;
+    line-height: 1.2;
+}
+
+.backg-success {
+    background-color: greenyellow;
+}
+
+.backg-danger {
+    background-color: red;
+}
