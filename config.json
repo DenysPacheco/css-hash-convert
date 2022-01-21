@@ -6,8 +6,15 @@
     "filesIgnore": [
         "-hashed"
     ],
+    "dirsIgnore":[
+        ".",
+        "packages",
+        "src",
+        "dist"
+    ],
     "extCopy": "-hashed",
-    "patternCSS": "\\.-?[_a-zA-Z]+[_a-zA-Z0-9-]*\\s*\\{",
+    "patternCSS": "[\\.\\#]-?[_a-zA-Z]+[_a-zA-Z0-9-]*\\s*\\{",
     "patternHTML": "class[\t]*=[\t]*\"[^\"]+",
-    "hashLength": 6
+    "hashLength": 6,
+    "overwriteFiles": false
 }

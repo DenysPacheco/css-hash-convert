@@ -5,9 +5,11 @@ It was inspired on Google's approach to minimize classes names to faster load we
 
 ## What it does
 
-- [x] Make a hash out of css classes names and apply for all the html's
+- [x] Make a hash out of css and id classes
+- [x] Auto apply for all the html files
 - [x] Create `-hashed` file with the output
-- [x] Auto change the css names of the link tags
+- [x] Auto change the css file to `-hashed` in the html link tag
+- [x] Multiple files on multiple folders
 
 ## Usage
 
@@ -15,16 +17,12 @@ Just put the script/files on the top folder and execute.
 
 It will search all files with the extensions marked on the configuration file.
 
-It will give the output with `foo-hashed.html` and `foo-hashed.css`
+It will give the output with `foo-hashed.html` and `foo-hashed.css`.
 
 ### Configure
 
-Use the [configuration file](config.json) to change behaviour and variables of the script
+Change in the [configuration file](/config.json) the directories to be ignored, hash length and overwrite files.
 
-## Future features
+## To Change?
 
-- [ ] Hashfy id's
-- [ ] Multiple files on mutiple folders (with track)
-- [ ] Hash function use letters
-- [ ] Delete old files on new run
-- [ ] Add tests?
+- [ ] Separation of classes and ids in prefix

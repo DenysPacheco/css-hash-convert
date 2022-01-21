@@ -12,8 +12,8 @@ def read(file):
     return lines
 
 
-def write(_PATH, new_name, lines):
-    with open(_PATH + new_name, 'w') as exf:
+def write(root, new_name, lines):
+    with open(os.path.join(root, new_name), 'w') as exf:
         exf.writelines(lines)
         exf.close()
 
@@ -39,29 +39,47 @@ def main():
         config = json.load(json_data_file)
     _PATH = os.getcwd() + '/'
 
+    search_files = []
     # Look for files
-    search_files = [f for f in listdir(_PATH) if isfile(join(_PATH, f)) and [bool(
-        s) for s in config['filesSearch'] if f.endswith(s)] and [bool(i) for i in config['filesIgnore'] if i not in f]]
+    for root, subdirectories, files in os.walk(_PATH):
+        # Comprehension to break outter loop
+        if any([dirsIgnore for dirsIgnore in config['dirsIgnore'] if dirsIgnore in root]):
+            continue
 
-    print(f'files: {search_files}\n')
+        # And all its files
+        for index, file in enumerate(files):
+            for filesSearch in config['filesSearch']:
+                for filesIgnore in config['filesIgnore']:
+                    if(filesSearch in file and filesIgnore not in file):
+                        search_files.append((root, file))
+
+    #print(f'files: {search_files}\n')
+
+    print('CSS Hashfy found files:', end='\n\n')
+    for root, file in search_files:
+        print(os.path.join(root, file))
+    print()
+
+    print('Starting hashing...', end='\n\n')
 
     # Initializing alg vars
     count = 0
     classes_dict = {}
 
     # Get all the files with the '.css' extension
-    css_files = [file for file in search_files if '.css' in file]
+    css_files = [(root, file)
+                 for root, file in search_files if file.endswith('.css')]
 
     # Copy the files of the search
-    for file in css_files:
-        lines = read(file)
+    for root, file in css_files:
+        lines = read(os.path.join(root, file))
 
-        new_name, substring = getVars(file, config)
+        new_name, substring = getVars(os.path.join(root, file), config)
 
         # If the file doesn't exist, create a new one
-        if(not isfile(join(_PATH, new_name))):
+        if(config['overwriteFiles'] or not isfile(join(root, new_name))):
             substring = [s.translate({ord('.'): None, ord(
-                '{'): None}).strip() for s in substring]
+                '{'): None, ord('#'): None}).strip() for s in substring]
 
             # Create the dictionary with the classe's hashes of the CSS
             classes_dict.update(
@@ -76,29 +94,30 @@ def main():
                         l = l.replace(k, 'c'+v)
                 lines[index] = l
 
-            write(_PATH, new_name, lines)
+            write(root, new_name, lines)
             count += 1
-            print(f"{10*'*'} \t {new_name} \t {10*'*'}")
+            print(f"{10*'*'} \t {new_name.split('/')[-1]} \t {10*'*'}")
 
         # If it exists, pass
         else:
-            print(f'!! file {new_name} already existed! !!')
+            print(f'!! file already existed: {new_name}')
 
     # Overwrite HTML classes
-    html_files = [file for file in search_files if '.html' in file]
+    html_files = [(root, file)
+                  for root, file in search_files if file.endswith('.html')]
 
     # Copy the files of the search
-    for file in html_files:
-        lines = read(file)
+    for root, file in html_files:
+        lines = read(os.path.join(root, file))
 
-        new_name, substring = getVars(file, config)
+        new_name, substring = getVars(os.path.join(root, file), config)
 
         # HTML WRITE
 
         # HTML overwrite link tags
-        if(not isfile(join(_PATH, new_name))):
+        if(config['overwriteFiles'] or not isfile(join(root, new_name))):
             for index, l in enumerate(lines):
-                for file in css_files:
+                for root, file in css_files:
                     if file in l and 'link' in l:
                         l = l.replace(
                             file, f"{file.split('.')[0]}{config['extCopy']}.css")
@@ -111,13 +130,13 @@ def main():
                         l = l.replace(k, 'c'+v)
                 lines[index] = l
 
-            write(_PATH, new_name, lines)
+            write(root, new_name, lines)
             count += 1
-            print(f"{10*'*'} \t {new_name} \t {10*'*'}")
+            print(f"{10*'*'} \t {new_name.split('/')[-1]} \t {10*'*'}")
 
         # If it exists, pass
         else:
-            print(f'!! file {new_name} already existed! !!')
+            print(f'!! file already existed: {new_name}')
 
     print()
     print(f'finished! {str(int(count/len(search_files))*100)}% done.')

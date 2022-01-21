@@ -15,3 +15,8 @@
 .backg-danger {
     background-color: red;
 }
+
+#list-items {
+    width: max-content;
+    margin: auto;
+}

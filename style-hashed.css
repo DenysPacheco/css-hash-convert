@@ -1,17 +1,22 @@
-.c145221 {
+.c538942 {
     text-align: center !important;
 }
 
-.c953905 {
+.c69861 {
     font-size: calc(1.475rem + 2.7vw);
     font-weight: 300;
     line-height: 1.2;
 }
 
-.c882365 {
+.c247297 {
     background-color: greenyellow;
 }
 
-.c323667 {
+.c496546 {
     background-color: red;
+}
+
+#c501666 {
+    width: max-content;
+    margin: auto;
 }
