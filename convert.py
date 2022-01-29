@@ -9,7 +9,7 @@ search_files = lookfiles()
 def main():
     search_files = lookfiles()
 
-    if(config['output']):
+    if(config['console']):
 
         #print(f'files: {search_files}\n')
 
@@ -25,7 +25,7 @@ def main():
 
     html_count = htmlhash(search_files, classes_dict, css_files)
 
-    if(config['output']):
+    if(config['console']):
 
         print()
         print(

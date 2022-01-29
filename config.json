@@ -12,11 +12,12 @@
         "src",
         "dist"
     ],
-    "extCopy": "-hashed",
+    "sufix": "-hashed",
+    "prefix": "_",
     "patternCSS": "[\\.\\#]-?([_a-zA-Z]+[_a-zA-Z0-9-]*)\\s*\\{",
     "patternHTML": "class[\t]*=[\t]*\"[^\"]+",
     "hashLength": 6,
-    "overwriteFiles": false,
+    "overwriteFiles": true,
     "minimize": true,
-    "output": true
+    "console": true
 }

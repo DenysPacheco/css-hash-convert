@@ -1,7 +1,9 @@
 import os
 import json
+import random
 import re
 from os.path import isfile, join
+import string
 
 
 def loadconfig():
@@ -39,7 +41,7 @@ def getvars(file):
     substring = re.findall(config['pattern' + pattern_file], str(lines))
 
     name, ext = file.split('.')
-    new_name = name + config['extCopy'] + '.' + ext
+    new_name = name + config['sufix'] + '.' + ext
 
     return new_name, substring
 
@@ -81,8 +83,13 @@ def csshash(search_files):
         if(config['overwriteFiles'] or not isfile(join(root, new_name))):
 
             # Create the dictionary with the classe's hashes of the CSS
+
+            # classes_dict.update(
+            #    {s: str(abs(hash(s)) % (10 ** config['hashLength'])) for s in substring})
+
             classes_dict.update(
-                {s: str(abs(hash(s)) % (10 ** config['hashLength'])) for s in substring})
+                {s: str(''.join(random.choice(string.ascii_uppercase +
+                                              string.ascii_lowercase + string.digits) for _ in range(config['hashLength']))) for s in substring})
 
             # CSS WRITE
 
@@ -90,7 +97,7 @@ def csshash(search_files):
             for index, l in enumerate(lines):
                 for k, v in classes_dict.items():
                     if k in l:
-                        l = l.replace(k, 'c'+v)
+                        l = l.replace(k, config['prefix']+v)
                 if(config['minimize']):
                     lines[index] = ''.join(l.split())
                 else:
@@ -98,7 +105,7 @@ def csshash(search_files):
 
             write(root, new_name, lines)
             count += 1
-            if(config['output']):
+            if(config['console']):
                 print(f"{10*'*'} \t {new_name.split('/')[-1]} \t {10*'*'}")
 
         # If it exists, pass
@@ -130,14 +137,14 @@ def htmlhash(search_files, classes_dict, css_files):
                 for root, file in css_files:
                     if file in l and 'link' in l:
                         l = l.replace(
-                            file, f"{file.split('.')[0]}{config['extCopy']}.css")
+                            file, f"{file.split('.')[0]}{config['sufix']}.css")
                 lines[index] = l
 
             # Overwrite html lines with the hashed css classes
             for index, l in enumerate(lines):
                 for k, v in classes_dict.items():
                     if k in l:
-                        l = l.replace(k, 'c'+v)
+                        l = l.replace(k, config['prefix']+v)
                 if(config['minimize']):
                     lines[index] = ''.join(l.split())
                 else:
@@ -145,7 +152,7 @@ def htmlhash(search_files, classes_dict, css_files):
 
             write(root, new_name, lines)
             count += 1
-            if(config['output']):
+            if(config['console']):
                 print(f"{10*'*'} \t {new_name.split('/')[-1]} \t {10*'*'}")
 
         # If it exists, pass
