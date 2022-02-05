@@ -42,7 +42,7 @@ Configurations options:
 
 **Mind that: if `overwrite: false` the hash will not be equal to the old files; therefore: not in sync; therefore: 👋 bye bye css.**
 
-## What to come 🤔
+## 🤔 What to come
 
 - [ ] Obfuscate everything?
 - [ ] How about js too?
