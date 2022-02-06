@@ -15,6 +15,7 @@
     "sufix": ".min",
     "prefix": "_",
     "patternCSS": "[\\.\\#]-?([_a-zA-Z]+[_a-zA-Z0-9-]*)\\s*\\{",
+    "patternCSSClear": "\\/\\*.*\\*\\/",
     "patternHTML": "class[\t]*=[\t]*\"[^\"]+",
     "patternHTMLClear": "[^><a-zA-Z0-9\"',._-] ( *)|(<!--(.*?)-->)",
     "hashLength": 6,

@@ -99,6 +99,7 @@ def cssHash(search_files):
                     if k in l:
                         l = l.replace(k, config['prefix']+v)
                 if(config['minimize']):
+                    l = re.sub(config['patternCSSClear'], '', str(l)).strip()
                     lines[index] = ''.join(l.split())
                 else:
                     lines[index] = l
