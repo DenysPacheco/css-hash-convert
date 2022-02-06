@@ -1,13 +1,13 @@
 import os
 from functions import *
 
-config, _PATH = loadconfig()
+config, _PATH = loadConfig()
 
-search_files = lookfiles()
+search_files = lookFiles()
 
 
 def main():
-    search_files = lookfiles()
+    search_files = lookFiles()
 
     if(config['console']):
 
@@ -21,9 +21,9 @@ def main():
         print('Starting hashing...', end='\n\n')
 
     # Initializing alg vars
-    classes_dict, css_files, css_count = csshash(search_files)
+    classes_dict, css_files, css_count = cssHash(search_files)
 
-    html_count = htmlhash(search_files, classes_dict, css_files)
+    html_count = htmlHash(search_files, classes_dict, css_files)
 
     if(config['console']):
 

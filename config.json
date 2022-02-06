@@ -16,6 +16,7 @@
     "prefix": "_",
     "patternCSS": "[\\.\\#]-?([_a-zA-Z]+[_a-zA-Z0-9-]*)\\s*\\{",
     "patternHTML": "class[\t]*=[\t]*\"[^\"]+",
+    "patternHTMLClear": "[^><a-zA-Z0-9\"',._-] ( *)|(<!--(.*?)-->)",
     "hashLength": 6,
     "overwriteFiles": true,
     "minimize": true,

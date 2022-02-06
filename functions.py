@@ -6,7 +6,7 @@ from os.path import isfile, join
 import string
 
 
-def loadconfig():
+def loadConfig():
     # Load config.json
     with open("config.json") as json_data_file:
         config = json.load(json_data_file)
@@ -15,7 +15,7 @@ def loadconfig():
     return config, _PATH
 
 
-config, _PATH = loadconfig()
+config, _PATH = loadConfig()
 
 
 def read(file):
@@ -31,7 +31,7 @@ def write(root, new_name, lines):
         exf.close()
 
 
-def getvars(file):
+def getVars(file):
     # Get the extension and use as a flag e.g.: HTML, CSS...
     pattern_file = file.split('.')[1].upper()
 
@@ -46,7 +46,7 @@ def getvars(file):
     return new_name, substring
 
 
-def lookfiles():
+def lookFiles():
     search_files = []
     # Look for files
     for root, subdirectories, files in os.walk(_PATH):
@@ -64,7 +64,7 @@ def lookfiles():
     return search_files
 
 
-def csshash(search_files):
+def cssHash(search_files):
 
     classes_dict = {}
     count = 0
@@ -77,7 +77,7 @@ def csshash(search_files):
     for root, file in css_files:
         lines = read(os.path.join(root, file))
 
-        new_name, substring = getvars(os.path.join(root, file))
+        new_name, substring = getVars(os.path.join(root, file))
 
         # If the file doesn't exist, create a new one
         if(config['overwriteFiles'] or not isfile(join(root, new_name))):
@@ -115,7 +115,7 @@ def csshash(search_files):
     return classes_dict, css_files, count
 
 
-def htmlhash(search_files, classes_dict, css_files):
+def htmlHash(search_files, classes_dict, css_files):
 
     count = 0
 
@@ -127,7 +127,7 @@ def htmlhash(search_files, classes_dict, css_files):
     for root, file in html_files:
         lines = read(os.path.join(root, file))
 
-        new_name, substring = getvars(os.path.join(root, file))
+        new_name, substring = getVars(os.path.join(root, file))
 
         # HTML WRITE
 
@@ -146,7 +146,8 @@ def htmlhash(search_files, classes_dict, css_files):
                     if k in l:
                         l = l.replace(k, config['prefix']+v)
                 if(config['minimize']):
-                    lines[index] = ''.join(l.split())
+                    lines[index] = re.sub(
+                        config['patternHTMLClear'], '', str(l)).strip()
                 else:
                     lines[index] = l
 
