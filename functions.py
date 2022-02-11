@@ -77,7 +77,7 @@ def cssHash(search_files):
     for root, file in css_files:
         lines = read(os.path.join(root, file))
 
-        new_name, substring = getVars(os.path.join(root, file))
+        new_name, classes = getVars(os.path.join(root, file))
 
         # If the file doesn't exist, create a new one
         if(config['overwriteFiles'] or not isfile(join(root, new_name))):
@@ -88,16 +88,17 @@ def cssHash(search_files):
             #    {s: str(abs(hash(s)) % (10 ** config['hashLength'])) for s in substring})
 
             classes_dict.update(
-                {s: str(''.join(random.choice(string.ascii_uppercase +
-                                              string.ascii_lowercase + string.digits) for _ in range(config['hashLength']))) for s in substring})
+                {'-'.join([file, css_class]): str(''.join(random.choice(string.ascii_uppercase +
+                                                                        string.ascii_lowercase + string.digits) for _ in range(config['hashLength']))) for css_class in classes})
 
             # CSS WRITE
 
             # Copy the hashes to the copied lines of the file
             for index, l in enumerate(lines):
                 for k, v in classes_dict.items():
-                    if k in l:
-                        l = l.replace(k, config['prefix']+v)
+                    key = k.split('-', 1)[1]
+                    if key in l:
+                        l = l.replace(key, config['prefix']+v)
                 if(config['minimize']):
                     l = re.sub(config['patternCSSClear'], '', str(l)).strip()
                     lines[index] = ''.join(l.split())
@@ -134,23 +135,27 @@ def htmlHash(search_files, classes_dict, css_files):
 
         # HTML overwrite link tags
         if(config['overwriteFiles'] or not isfile(join(root, new_name))):
-            for index, l in enumerate(lines):
+            css_found = set()
+
+            for index, line in enumerate(lines):
                 for root, file in css_files:
-                    if file in l and 'link' in l:
-                        l = l.replace(
+                    if file in line and 'link' in line:
+                        css_found.add(file)
+                        line = line.replace(
                             file, f"{file.split('.')[0]}{config['sufix']}.css")
-                lines[index] = l
+                lines[index] = line
 
             # Overwrite html lines with the hashed css classes
-            for index, l in enumerate(lines):
-                for k, v in classes_dict.items():
-                    if k in l:
-                        l = l.replace(k, config['prefix']+v)
+            for index, line in enumerate(lines):
+                for k, v in {key: value for key, value in classes_dict.items() if key.split('-')[0] in css_found}.items():
+                    css_class = k.split('-', 1)[1]
+                    if css_class in line:
+                        line = line.replace(css_class, config['prefix']+v)
                 if(config['minimize']):
                     lines[index] = re.sub(
-                        config['patternHTMLClear'], '', str(l)).strip()
+                        config['patternHTMLClear'], '', str(line)).strip()
                 else:
-                    lines[index] = l
+                    lines[index] = line
 
             write(root, new_name, lines)
             count += 1

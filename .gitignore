@@ -1,4 +1,4 @@
 .vscode
 .pytest_cache
-test.py
+test*.py
 __pycache__
