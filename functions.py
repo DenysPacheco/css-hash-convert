@@ -137,10 +137,13 @@ def htmlHash(search_files, classes_dict, css_files):
         if(config['overwriteFiles'] or not isfile(join(root, new_name))):
             css_found = set()
 
+            # Seach only the files (set) contained by the html
             for index, line in enumerate(lines):
                 for root, file in css_files:
                     if file in line and 'link' in line:
-                        css_found.add(file)
+                        stripName = line.strip().split(
+                            ' ')[1].split('=')[-1].split('/')[-1].replace('\"', '')
+                        css_found.add(stripName)
                         line = line.replace(
                             file, f"{file.split('.')[0]}{config['sufix']}.css")
                 lines[index] = line

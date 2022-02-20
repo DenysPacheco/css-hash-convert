@@ -32,4 +32,6 @@ def main():
             f'finished! {str(int((html_count + css_count)/len(search_files))*100)}% done.')
 
 
+################ Main ################
+
 main()
