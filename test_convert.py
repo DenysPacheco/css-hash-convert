@@ -3,16 +3,16 @@ import os
 from functions import *
 
 
-def test_FindSpacesHtml():
+def test_find_spaces_html():
 
-    results = findSpacesHtml()
+    results = find_spaces_html()
 
     assert results == []
 
 
-def test_FindNotHashedClassesHtml():
+def test_find_not_hashed_classes_html():
 
-    results = findHtmlClasses()
+    results = find_html_classes()
     list = set()
     ignore = ['fa']
 
@@ -28,7 +28,9 @@ def test_FindNotHashedClassesHtml():
         assert item.startswith('_')
 
 
-def findSpacesHtml():
+########## Test Functions ##########
+
+def find_spaces_html():
     files = lookFiles()
     results = 0
 
@@ -45,7 +47,7 @@ def findSpacesHtml():
     return results
 
 
-def findHtmlClasses():
+def find_html_classes():
     files = lookFiles()
     results = []
 
