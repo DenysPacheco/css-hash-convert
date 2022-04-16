@@ -28,7 +28,27 @@ def test_find_not_hashed_classes_html():
         assert item.startswith('_')
 
 
+def test_non_min_tags_html():
+    files = lookFiles()
+    css_files = [file for _, file in files if file.endswith('.css')]
+
+    for file in files:
+        dir, arc = file
+        name, ext = arc.split('.')
+        arc = name + '.min.' + ext
+        if(arc.endswith('.html')):
+            f = os.path.join(dir, arc)
+            links = re.findall(
+                "(?<=<link).*(?<=href..)(?!http)(\\S+)(?=\"|\\')", str(read(f)))
+            for line in links:
+                if line in css_files:
+                    assert '.min' in line
+
+
+test_non_min_tags_html()
+
 ########## Test Functions ##########
+
 
 def find_spaces_html():
     files = lookFiles()
@@ -38,7 +58,6 @@ def find_spaces_html():
         dir, arc = file
         name, ext = arc.split('.')
         arc = name + '.min.' + ext
-        # print(os.path.join(dir, arc))
         if(arc.endswith('.html')):
             f = os.path.join(dir, arc)
             results = re.findall(

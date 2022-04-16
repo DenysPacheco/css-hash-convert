@@ -1,10 +1,3 @@
-from functions import *
-import string
-from os.path import isfile, join
-import re
-import random
-import json
-import os
 
 
 #################### Configurations ####################
@@ -29,6 +22,9 @@ config = {
     "patternHTML": "class[\t]*=[\t]*\"[^\"]+",
     "patternCSSClear": "\\/\\*.*\\*\\/",
     "patternHTMLClear": "[^><a-zA-Z0-9\"',._-] ( *)|(<!--(.*?)-->)",
+    "patternHTMLLinks": "(?<=<link).*(?<=href..)(?!http)(\\S+)(?=\"|\\')",
+    "patternHTMLLinksAlt": "(?<=<link)(.href=\"|\\')(?!http)(\\S+)(?=\"|\\')",
+    "patternHTMLHead": "<head>(?:.|\\n|\\r)+?</head>",
     "hashLength": 6,
     "overwriteFiles": True,
     "minimize": True,
@@ -38,6 +34,14 @@ config = {
 
 #################### Functions ####################
 
+import os
+import json
+import random
+import re
+from os.path import isfile, join
+import string
+
+
 def loadConfig():
     # Load config.json
     with open("config.json") as json_data_file:
@@ -45,6 +49,9 @@ def loadConfig():
     _PATH = os.getcwd() + '/'
 
     return config, _PATH
+
+
+config, _PATH = loadConfig()
 
 
 def read(file):
@@ -62,17 +69,17 @@ def write(root, new_name, lines):
 
 def getVars(file):
     # Get the extension and use as a flag e.g.: HTML, CSS...
-    pattern_file = file.split('.')[1].upper()
+    type_file = file.split('.')[1].upper()
 
     lines = read(file)
 
     # Use the right regex to find the classes on the file
-    substring = re.findall(config['pattern' + pattern_file], str(lines))
+    classes_file = re.findall(config['pattern' + type_file], str(lines))
 
     name, ext = file.split('.')
     new_name = name + config['sufix'] + '.' + ext
 
-    return new_name, substring
+    return new_name, classes_file
 
 
 def lookFiles():
@@ -93,46 +100,58 @@ def lookFiles():
     return search_files
 
 
+def getFiles(search_files, extension):
+    type_files = [(root, file)
+                  for root, file in search_files if file.endswith(extension)]
+
+    return type_files
+
+
 def cssHash(search_files):
 
     classes_dict = {}
     count = 0
 
     # Get all the files with the '.css' extension
-    css_files = [(root, file)
-                 for root, file in search_files if file.endswith('.css')]
+    css_files = getFiles(search_files, '.css')
 
     # Copy the files of the search
-    for root, file in css_files:
-        lines = read(os.path.join(root, file))
+    for root, file_name in css_files:
+        lines = read(os.path.join(root, file_name))
 
-        new_name, classes = getVars(os.path.join(root, file))
+        new_name, classes = getVars(os.path.join(root, file_name))
 
         # If the file doesn't exist, create a new one
         if(config['overwriteFiles'] or not isfile(join(root, new_name))):
 
             # Create the dictionary with the classe's hashes of the CSS
+            for css_class in classes:
+                name_hash_file = '-'.join([file_name, css_class])
+                hash_number = ''
 
-            # classes_dict.update(
-            #    {s: str(abs(hash(s)) % (10 ** config['hashLength'])) for s in substring})
+                for _ in range(config['hashLength']):
+                    hash_number += str(''.join(random.choice(
+                        string.ascii_uppercase + string.ascii_lowercase + string.digits)))
 
-            classes_dict.update(
-                {'-'.join([file, css_class]): str(''.join(random.choice(string.ascii_uppercase +
-                                                                        string.ascii_lowercase + string.digits) for _ in range(config['hashLength']))) for css_class in classes})
+                    classes_dict.update({name_hash_file: hash_number})
 
             # CSS WRITE
 
             # Copy the hashes to the copied lines of the file
-            for index, l in enumerate(lines):
-                for k, v in classes_dict.items():
-                    key = k.split('-', 1)[1]
-                    if key in l:
-                        l = l.replace(key, config['prefix']+v)
+            for index, single_line in enumerate(lines):
+                for key, value in classes_dict.items():
+                    key = key.split('-', 1)[1]
+
+                    if key in single_line:
+                        single_line = single_line.replace(
+                            key, config['prefix']+value)
+
                 if(config['minimize']):
-                    l = re.sub(config['patternCSSClear'], '', str(l)).strip()
-                    lines[index] = ''.join(l.split())
+                    single_line = re.sub(
+                        config['patternCSSClear'], '', str(single_line)).strip()
+                    lines[index] = ''.join(single_line.split())
                 else:
-                    lines[index] = l
+                    lines[index] = single_line
 
             write(root, new_name, lines)
             count += 1
@@ -151,14 +170,13 @@ def htmlHash(search_files, classes_dict, css_files):
     count = 0
 
     # Overwrite HTML classes
-    html_files = [(root, file)
-                  for root, file in search_files if file.endswith('.html')]
+    html_files = getFiles(search_files, '.html')
 
     # Copy the files of the search
-    for root, file in html_files:
-        lines = read(os.path.join(root, file))
+    for root, file_name in html_files:
+        lines = read(os.path.join(root, file_name))
 
-        new_name, substring = getVars(os.path.join(root, file))
+        new_name, substring = getVars(os.path.join(root, file_name))
 
         # HTML WRITE
 
@@ -167,27 +185,45 @@ def htmlHash(search_files, classes_dict, css_files):
             css_found = set()
 
             # Seach only the files (set) contained by the html
-            for index, line in enumerate(lines):
-                for root, file in css_files:
-                    if file in line and 'link' in line:
-                        stripName = line.strip().split(
-                            ' ')[1].split('=')[-1].split('/')[-1].replace('\"', '')
-                        css_found.add(stripName)
-                        line = line.replace(
-                            file, f"{file.split('.')[0]}{config['sufix']}.css")
-                lines[index] = line
+            for index, single_line in enumerate(lines):
+                # look only the head lines - 'in' for minimized files
+                if('</head>' in single_line):
+                    break
+                for root, css_file_name in css_files:
+                    # if css_file_name in single_line and 'link' in single_line:
+                    if css_file_name in single_line:
+
+                        class_strip_name = re.findall(
+                            config['patternHTMLLinks'], str(single_line))[0].split('/')[-1]
+
+                        css_found.add(class_strip_name)
+
+                        single_line = single_line.replace(
+                            css_file_name, f"{css_file_name.split('.')[0]}{config['sufix']}.css")
+
+                        lines[index] = single_line
 
             # Overwrite html lines with the hashed css classes
-            for index, line in enumerate(lines):
-                for k, v in {key: value for key, value in classes_dict.items() if key.split('-')[0] in css_found}.items():
-                    css_class = k.split('-', 1)[1]
-                    if css_class in line:
-                        line = line.replace(css_class, config['prefix']+v)
+            for index, single_line in enumerate(lines):
+
+                temp_dict = {}
+                for key, value in classes_dict.items():
+
+                    if key.split('-')[0] in css_found:
+                        temp_dict.update({key: value})
+
+                for key, value in temp_dict.items():
+
+                    css_class = key.split('-', 1)[1]
+                    if css_class in single_line:
+                        single_line = single_line.replace(
+                            css_class, config['prefix']+value)
+
                 if(config['minimize']):
                     lines[index] = re.sub(
-                        config['patternHTMLClear'], '', str(line)).strip()
+                        config['patternHTMLClear'], '', str(single_line)).strip()
                 else:
-                    lines[index] = line
+                    lines[index] = single_line
 
             write(root, new_name, lines)
             count += 1
@@ -201,7 +237,11 @@ def htmlHash(search_files, classes_dict, css_files):
     return count
 
 
-#################### Main ####################
+
+#################### Converter ####################
+
+import os
+from functions import *
 
 config, _PATH = loadConfig()
 
@@ -234,4 +274,8 @@ def main():
             f'finished! {str(int((html_count + css_count)/len(search_files))*100)}% done.')
 
 
+################ Main ################
+
 main()
+
+
