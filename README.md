@@ -1,5 +1,6 @@
-
 # Css Hashfy & Minify Converter ♻️
+
+![Hashfyer Banner](images/banner.webp)
 
 This is a **Python** script to **hashfy & minify** css classes and html tags.
 
@@ -49,7 +50,7 @@ Change in the [configuration file](/config.json) the directories to be ignored, 
 
 ### Configuration options
 
-| Flags            | Meaning                                  |
+| Flags            | Description                              |
 | ---------------- | ---------------------------------------- |
 | filesSearch      | Extensions of the files to search        |
 | filesIgnore      | Extensions of the files to ignore        |

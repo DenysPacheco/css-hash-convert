@@ -11,7 +11,7 @@ def main():
 
     if(config['console']):
 
-        #print(f'files: {search_files}\n')
+        # print(f'files: {search_files}\n')
 
         print('CSS Hashfy found files:', end='\n\n')
         for root, file in search_files:

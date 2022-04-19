@@ -4,3 +4,10 @@
 __pycache__
 tempCodeRunnerFile.py
 *.todo
+scripts/
+build.sh
+build_this.sh
+del_pycache.sh
+*.png
+*.webp
+!banner*
