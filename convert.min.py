@@ -1,6 +1,13 @@
+import string
+from os.path import isfile, join
+import re
+import random
+import json
+import os
 
 
 #################### Configurations ####################
+
 
 config = {
     "filesSearch": [
@@ -31,27 +38,10 @@ config = {
     "console": True
 }
 
+_PATH = os.getcwd() + '/'
+
 
 #################### Functions ####################
-
-import os
-import json
-import random
-import re
-from os.path import isfile, join
-import string
-
-
-def loadConfig():
-    # Load config.json
-    with open("config.json") as json_data_file:
-        config = json.load(json_data_file)
-    _PATH = os.getcwd() + '/'
-
-    return config, _PATH
-
-
-config, _PATH = loadConfig()
 
 
 def read(file):
@@ -237,13 +227,8 @@ def htmlHash(search_files, classes_dict, css_files):
     return count
 
 
-
 #################### Converter ####################
 
-import os
-from functions import *
-
-config, _PATH = loadConfig()
 
 search_files = lookFiles()
 
@@ -277,5 +262,3 @@ def main():
 ################ Main ################
 
 main()
-
-
