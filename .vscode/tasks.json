@@ -1,0 +1,43 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Converter",
+            "type": "shell",
+            "command": "python3 src/convert.py",
+            "problemMatcher": []
+        },
+        {
+            "label": "Runs tests",
+            "type": "shell",
+            "command": "pytest",
+            "problemMatcher": []
+        },
+        {
+            "label": "Delete output (*.min) files",
+            "type": "shell",
+            "command": "rm -rfv examples/*.min*; rm -rfv examples/*/*.min*; rm -rfv __pycache__/ .pytest_cache/; rm tempCodeRunnerFile.py",
+            "problemMatcher": []
+        },
+        {
+            "label": "Build convert.min.py",
+            "type": "shell",
+            "command": "scripts/build.sh",
+            "problemMatcher": []
+        },
+        {
+            "label": "Clean Pycache",
+            "type": "shell",
+            "command": "scripts/del_pycache.sh",
+            "problemMatcher": []
+        },
+        {
+            "label": "Make Docs",
+            "type": "shell",
+            "command": "sphinx-apidoc -fo docs/source/ src/ && cd docs && make html",
+            "problemMatcher": []
+        },
+    ]
+}
