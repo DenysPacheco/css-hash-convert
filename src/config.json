@@ -6,11 +6,16 @@
     "filesIgnore": [
         ".min"
     ],
+    "dirsSearch": [
+        "examples"
+    ],
     "dirsIgnore": [
         ".",
         "packages",
         "src",
-        "dist"
+        "dist",
+        "build",
+        "source"
     ],
     "sufix": ".min",
     "prefix": "_",
