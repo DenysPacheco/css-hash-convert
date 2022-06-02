@@ -78,7 +78,7 @@ Change in the [configuration file](src/config.json) the directories to be ignore
 
 ## 📄 Documentation
 
-Also, if you want to read the code or the functions used on this project, please check the [documentation page](https://denyspacheco.github.io/css-hash-convert/docs/build/html/).
+Also, if you want to read the code or the functions used on this project, please check the [documentation page](https://denyspacheco.github.io/css-hash-convert/).
 
 ## 🤔 What to come
 
