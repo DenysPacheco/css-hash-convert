@@ -7,6 +7,9 @@ search_files = lookFiles()
 
 
 def main():
+    """Main function to run the script.
+    More details explained on the `functions` docs
+    """
 
     search_files = lookFiles()
 

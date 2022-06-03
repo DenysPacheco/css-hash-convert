@@ -53,8 +53,8 @@ def loadConfig():
 
     Returns:
         tuple: (config, _PATH)
-                - config (dict) are the vars of configurations
-                - _PATH (string) is the string of the root path
+                - config (dict): the vars of configurations
+                - _PATH (string): string of the root path
     """
 
     # Side tweak to fix file path for testing (and running script and build docs)
@@ -112,6 +112,17 @@ def write(root, new_name, lines):
 
 
 def getVars(file):
+    """Get and prepare the vars to use for a single file;
+    Being the name, extension, new name and content (based on the proper regex) on the file.
+
+    Args:
+        file (string): path to the file
+
+    Returns:
+        tuple: (new_name, classes_file)
+                - new_name (string): the new name with the minifier extension
+                - classes_file (list): the content of the file extracted from the regex
+    """
     # Get the extension and use as a flag e.g.: HTML, CSS...
     type_file = file.split(".")[1].upper()
 
@@ -127,14 +138,15 @@ def getVars(file):
 
 
 def lookFiles():
-    """Look for the files to convert.
+    """Look for the files to convert. Find all files with matching extensions out of config.json
+
      - Use _PATH as the root.
      - Ignore the dirs as specified in config['dirsIgnore']
      - Select files with extensions as specified in config['filesSearch']
      - Ignore files with extensions as specified in config['filesIgnore']
 
     Returns:
-        list: list of tuples with the name of the files as (root, file)
+        list: list of tuples [(root, file)] of all the files founded (given the extension on config.json)
     """
     search_files = []
     # Look for files
@@ -156,6 +168,17 @@ def lookFiles():
 
 
 def getFiles(search_files, extension):
+    """Get the list of files, separate and filter them by the extension and returns a tuple of (root, file)
+
+    Args:
+        search_files (list): list of all files searched
+        extension (string): extension type
+
+    Returns:
+        list: list of tuples [(root, file)] of the selected extension
+                - root (string): root path for the file (without the filename) 
+                - file (string): filename
+    """
     type_files = [
         (root, file) for root, file in search_files if file.endswith(extension)
     ]
@@ -164,6 +187,17 @@ def getFiles(search_files, extension):
 
 
 def cssHash(search_files):
+    """Hash the css classes and return a tuple
+
+    Args:
+        search_files (list): list of all files founded
+
+    Returns:
+        tuple: (classes_dict, css_files, count)
+                - classes_dict (list): list of dicts ({class: hashed}) of the hashed css classes
+                - css_files (list): list of tuples ([(root, file)]) of css files
+                - count (int): counter of the files altered
+    """
 
     classes_dict = {}
     count = 0
@@ -230,6 +264,16 @@ def cssHash(search_files):
 
 
 def htmlHash(search_files, classes_dict, css_files):
+    """Hash the html files and return a count of files altered
+
+    Args:
+        search_files (list): list of all files founded
+        classes_dict (list): list of dicts ({class: hashed}) of the hashed css classes
+        css_files (list): list of tuples ([(root, file)]) of css files
+
+    Returns:
+        int: count of the html files altered
+    """
 
     count = 0
 
@@ -317,6 +361,9 @@ search_files = lookFiles()
 
 
 def main():
+    """Main function to run the script.
+    More details explained on the `functions` docs
+    """
 
     search_files = lookFiles()
 

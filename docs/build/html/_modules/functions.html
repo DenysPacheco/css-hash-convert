@@ -76,8 +76,8 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        tuple: (config, _PATH)</span>
-<span class="sd">                - config (dict) are the vars of configurations</span>
-<span class="sd">                - _PATH (string) is the string of the root path</span>
+<span class="sd">                - config (dict): the vars of configurations</span>
+<span class="sd">                - _PATH (string): string of the root path</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Side tweak to fix file path for testing (and running script and build docs)</span>
@@ -135,6 +135,17 @@
 
 
 <div class="viewcode-block" id="getVars"><a class="viewcode-back" href="../functions.html#functions.getVars">[docs]</a><span class="k">def</span> <span class="nf">getVars</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get and prepare the vars to use for a single file;</span>
+<span class="sd">    Being the name, extension, new name and content (based on the proper regex) on the file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        file (string): path to the file</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: (new_name, classes_file)</span>
+<span class="sd">                - new_name (string): the new name with the minifier extension</span>
+<span class="sd">                - classes_file (list): the content of the file extracted from the regex</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Get the extension and use as a flag e.g.: HTML, CSS...</span>
     <span class="n">type_file</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
@@ -150,14 +161,15 @@
 
 
 <div class="viewcode-block" id="lookFiles"><a class="viewcode-back" href="../functions.html#functions.lookFiles">[docs]</a><span class="k">def</span> <span class="nf">lookFiles</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Look for the files to convert.</span>
+    <span class="sd">&quot;&quot;&quot;Look for the files to convert. Find all files with matching extensions out of config.json</span>
+
 <span class="sd">     - Use _PATH as the root.</span>
 <span class="sd">     - Ignore the dirs as specified in config[&#39;dirsIgnore&#39;]</span>
 <span class="sd">     - Select files with extensions as specified in config[&#39;filesSearch&#39;]</span>
 <span class="sd">     - Ignore files with extensions as specified in config[&#39;filesIgnore&#39;]</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        list: list of tuples with the name of the files as (root, file)</span>
+<span class="sd">        list: list of tuples [(root, file)] of all the files founded (given the extension on config.json)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">search_files</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># Look for files</span>
@@ -179,6 +191,17 @@
 
 
 <div class="viewcode-block" id="getFiles"><a class="viewcode-back" href="../functions.html#functions.getFiles">[docs]</a><span class="k">def</span> <span class="nf">getFiles</span><span class="p">(</span><span class="n">search_files</span><span class="p">,</span> <span class="n">extension</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the list of files, separate and filter them by the extension and returns a tuple of (root, file)</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        search_files (list): list of all files searched</span>
+<span class="sd">        extension (string): extension type</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list: list of tuples [(root, file)] of the selected extension</span>
+<span class="sd">                - root (string): root path for the file (without the filename) </span>
+<span class="sd">                - file (string): filename</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">type_files</span> <span class="o">=</span> <span class="p">[</span>
         <span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span> <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">search_files</span> <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">extension</span><span class="p">)</span>
     <span class="p">]</span>
@@ -187,6 +210,17 @@
 
 
 <div class="viewcode-block" id="cssHash"><a class="viewcode-back" href="../functions.html#functions.cssHash">[docs]</a><span class="k">def</span> <span class="nf">cssHash</span><span class="p">(</span><span class="n">search_files</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Hash the css classes and return a tuple</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        search_files (list): list of all files founded</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: (classes_dict, css_files, count)</span>
+<span class="sd">                - classes_dict (list): list of dicts ({class: hashed}) of the hashed css classes</span>
+<span class="sd">                - css_files (list): list of tuples ([(root, file)]) of css files</span>
+<span class="sd">                - count (int): counter of the files altered</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">classes_dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
@@ -253,6 +287,16 @@
 
 
 <div class="viewcode-block" id="htmlHash"><a class="viewcode-back" href="../functions.html#functions.htmlHash">[docs]</a><span class="k">def</span> <span class="nf">htmlHash</span><span class="p">(</span><span class="n">search_files</span><span class="p">,</span> <span class="n">classes_dict</span><span class="p">,</span> <span class="n">css_files</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Hash the html files and return a count of files altered</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        search_files (list): list of all files founded</span>
+<span class="sd">        classes_dict (list): list of dicts ({class: hashed}) of the hashed css classes</span>
+<span class="sd">        css_files (list): list of tuples ([(root, file)]) of css files</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: count of the html files altered</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
 

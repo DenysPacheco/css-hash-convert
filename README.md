@@ -14,10 +14,10 @@ It was inspired on Google's approach to minimize class names for faster loading 
   - [Contents](#contents)
   - [😄 What it does](#-what-it-does)
   - [📘 Usage](#-usage)
+  - [📄 Documentation](#-documentation)
   - [⚙️ Configure](#️-configure)
     - [Configuration options](#configuration-options)
       - [overwrite note](#overwrite-note)
-  - [📄 Documentation](#-documentation)
   - [🤔 What to come](#-what-to-come)
 
 ## 😄 What it does
@@ -44,6 +44,10 @@ Alternatively...
 It will search for all the files with the matching extensions and on the subfolders marked on the [configuration file](src/config.json) and do the changes. (default `.html` and `.css`)
 
 It will give the output with `foo.min.html` and `foo.min.css` on the same directorie as the original ones.
+
+## 📄 Documentation
+
+Also, if you want to see the functions or read the code (more hardcore 🤨) used on this project, please check the [documentation page](https://denyspacheco.github.io/css-hash-convert/).
 
 ## ⚙️ Configure
 
@@ -75,10 +79,6 @@ Change in the [configuration file](src/config.json) the directories to be ignore
 #### overwrite note
 
 > **Mind that: if `overwrite: false`, the css hash will not be equal to the old html files;** > **therefore: not in sync;** > **therefore: 👋 bye bye css.**
-
-## 📄 Documentation
-
-Also, if you want to read the code or the functions used on this project, please check the [documentation page](https://denyspacheco.github.io/css-hash-convert/).
 
 ## 🤔 What to come
 
