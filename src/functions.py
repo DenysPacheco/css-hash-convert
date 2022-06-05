@@ -22,7 +22,7 @@ def loadConfig():
     else:
         _localdir = sys.path[0]
 
-    # if there is no config file (then it's .min), get the global config var
+    # if there is no config file (then it's .min), get the global config var for converter.min.py
     if not os.path.exists(_localdir + '/config.json'):
         global config
     else:
@@ -51,6 +51,7 @@ def read(file):
     Returns:
         list: lines of the file
     """
+
     with open(file, "r") as f:
         lines = f.readlines()
         f.close()
@@ -65,6 +66,7 @@ def write(root, new_name, lines):
         new_name (string): new name of the file
         lines (list): list of the string to write
     """
+
     with open(os.path.join(root, new_name), "w") as exf:
         exf.writelines(lines)
         exf.close()
@@ -82,6 +84,7 @@ def getVars(file):
                 - new_name (string): the new name with the minifier extension
                 - classes_file (list): the content of the file extracted from the regex
     """
+
     # Get the extension and use as a flag e.g.: HTML, CSS...
     type_file = file.split(".")[1].upper()
 
@@ -107,6 +110,7 @@ def lookFiles():
     Returns:
         list: list of tuples [(root, file)] of all the files founded (given the extension on config.json)
     """
+
     search_files = []
     # Look for files
     for root, subdirectories, files in os.walk(_PATH):
@@ -138,6 +142,7 @@ def getFiles(search_files, extension):
                 - root (string): root path for the file (without the filename) 
                 - file (string): filename
     """
+
     type_files = [
         (root, file) for root, file in search_files if file.endswith(extension)
     ]

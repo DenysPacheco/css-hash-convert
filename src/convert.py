@@ -1,7 +1,8 @@
-from functions import cssHash, htmlHash, loadConfig, lookFiles
 import os
 
-config, _PATH = loadConfig()
+from functions import cssHash, htmlHash, loadConfig, lookFiles
+
+config, _ = loadConfig()
 
 search_files = lookFiles()
 

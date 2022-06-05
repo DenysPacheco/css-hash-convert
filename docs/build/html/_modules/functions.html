@@ -86,7 +86,7 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">_localdir</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="c1"># if there is no config file (then it&#39;s .min), get the global config var</span>
+    <span class="c1"># if there is no config file (then it&#39;s .min), get the global config var for converter.min.py</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">_localdir</span> <span class="o">+</span> <span class="s1">&#39;/config.json&#39;</span><span class="p">):</span>
         <span class="k">global</span> <span class="n">config</span>
     <span class="k">else</span><span class="p">:</span>
@@ -173,6 +173,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">search_files</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># Look for files</span>
+    <span class="nb">print</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">subdirectories</span><span class="p">,</span> <span class="n">files</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">walk</span><span class="p">(</span><span class="n">_PATH</span><span class="p">):</span>
         <span class="c1"># Comprehension to break outter loop</span>
         <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>

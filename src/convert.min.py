@@ -63,7 +63,7 @@ def loadConfig():
     else:
         _localdir = sys.path[0]
 
-    # if there is no config file (then it's .min), get the global config var
+    # if there is no config file (then it's .min), get the global config var for converter.min.py
     if not os.path.exists(_localdir + '/config.json'):
         global config
     else:
@@ -150,6 +150,7 @@ def lookFiles():
     """
     search_files = []
     # Look for files
+    print(__name__)
     for root, subdirectories, files in os.walk(_PATH):
         # Comprehension to break outter loop
         if any(
@@ -355,7 +356,7 @@ def htmlHash(search_files, classes_dict, css_files):
 
 import os
 
-config, _PATH = loadConfig()
+config, _ = loadConfig()
 
 search_files = lookFiles()
 
