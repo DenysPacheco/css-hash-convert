@@ -1,6 +1,6 @@
 import os
 
-from src.functions import lookFiles
+from src.utils import lookFiles
 
 
 def pytest_configure():

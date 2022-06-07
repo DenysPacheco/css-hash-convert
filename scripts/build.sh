@@ -12,12 +12,12 @@ echo -e '\n' >> src/convert.min.py &&
 echo -e '\n✅️ Configurations parsed!' || 
 echo -e '\n❌️ Error parsing Configurations!'
 
-#Putting functions in file
-echo -e '\n#################### Functions ####################\n' >> src/convert.min.py && 
-cat src/functions.py >> src/convert.min.py && 
+#Putting utils in file
+echo -e '\n#################### Utils ####################\n' >> src/convert.min.py && 
+cat src/utils.py >> src/convert.min.py && 
 echo -e '\n' >> src/convert.min.py &&
-echo -e '\n✅️ Functions parsed!' || 
-echo -e '\n❌️ Error parsing Functions!'
+echo -e '\n✅️ Utils parsed!' || 
+echo -e '\n❌️ Error parsing Utils!'
 
 #Putting main in file
 echo -e '\n#################### Converter ####################\n' >> src/convert.min.py && 

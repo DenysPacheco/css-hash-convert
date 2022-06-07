@@ -1,7 +1,7 @@
 import os
 import re
 
-from src.functions import lookFiles, read
+from src.utils import lookFiles, read
 
 
 def test_find_spaces_html():

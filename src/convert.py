@@ -1,6 +1,6 @@
-import os
+from utils import cssHash, htmlHash, loadConfig, lookFiles
 
-from functions import cssHash, htmlHash, loadConfig, lookFiles
+import os
 
 config, _ = loadConfig()
 
