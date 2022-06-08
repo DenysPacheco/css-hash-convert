@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>utils &mdash; css-hash-convert 1.0.0 documentation</title>
+  <title>utils &mdash; css-hash-convert 2.1.0 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -71,13 +71,51 @@
 <span class="kn">from</span> <span class="nn">os.path</span> <span class="k">import</span> <span class="n">isfile</span><span class="p">,</span> <span class="n">join</span>
 
 
-<div class="viewcode-block" id="loadConfig"><a class="viewcode-back" href="../utils.html#utils.loadConfig">[docs]</a><span class="k">def</span> <span class="nf">loadConfig</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;Load initial configurations of the json file.</span>
+<div class="viewcode-block" id="confirmPath"><a class="viewcode-back" href="../utils.html#utils.confirmPath">[docs]</a><span class="k">def</span> <span class="nf">confirmPath</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Confirm if a path is a valid directory path.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (string): path to dir</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        OSError: if path is not dir or does not exists</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        tuple: (config, _PATH)</span>
-<span class="sd">                - config (dict): the vars of configurations</span>
-<span class="sd">                - _PATH (string): string of the root path</span>
+<span class="sd">        string: the same path, if valid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span>
+            <span class="n">f</span><span class="s1">&#39;</span><span class="si">{path}</span><span class="s1">: Path is not a directory path or it does not exists.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">path</span></div>
+
+
+<div class="viewcode-block" id="confirmFile"><a class="viewcode-back" href="../utils.html#utils.confirmFile">[docs]</a><span class="k">def</span> <span class="nf">confirmFile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Confirm if a path is a valid file path.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (string): path to file</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        OSError: if path is not file or does not exists</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: the same path, if valid</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span>
+            <span class="n">f</span><span class="s1">&#39;</span><span class="si">{path}</span><span class="s1">: Path is not a file path or it does not exists.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">path</span></div>
+
+
+<div class="viewcode-block" id="loadConfig"><a class="viewcode-back" href="../utils.html#utils.loadConfig">[docs]</a><span class="k">def</span> <span class="nf">loadConfig</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Initialize the config.json file and config var</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: config dictionary</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Side tweak to fix file path for testing (and running script and build docs)</span>
@@ -90,20 +128,39 @@
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">_localdir</span> <span class="o">+</span> <span class="s1">&#39;/config.json&#39;</span><span class="p">):</span>
         <span class="k">global</span> <span class="n">config</span>
     <span class="k">else</span><span class="p">:</span>
+
         <span class="c1"># Load config.json</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;</span><span class="si">{_localdir}</span><span class="s2">/config.json&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_data_file</span><span class="p">:</span>
             <span class="n">config</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_data_file</span><span class="p">)</span>
 
-    <span class="c1"># Configure the PATH arg to run the script on</span>
-    <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;dirsSearch&quot;</span><span class="p">]:</span>
-        <span class="n">_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;dirsSearch&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+    <span class="k">return</span> <span class="n">config</span></div>
+
+
+<div class="viewcode-block" id="loadPath"><a class="viewcode-back" href="../utils.html#utils.loadPath">[docs]</a><span class="k">def</span> <span class="nf">loadPath</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads the PATH to the dir with the files to convert</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str, optional): path of the dir (in config.json defaults to &#39;examples&#39;). Defaults to &#39;&#39;.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: the path of the dir to convert the files</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Doesn&#39;t need load for the config in main loads in the global scope</span>
+    <span class="c1"># But it does have to put on the tests</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">loadConfig</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">path</span><span class="p">:</span>
+        <span class="n">_PATH</span> <span class="o">=</span> <span class="n">confirmPath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
 
-    <span class="k">return</span> <span class="n">config</span><span class="p">,</span> <span class="n">_PATH</span></div>
+        <span class="c1"># Configure the PATH arg to run the script on</span>
+        <span class="k">if</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;dirsSearch&quot;</span><span class="p">]:</span>
+            <span class="n">_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;dirsSearch&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span>
 
-
-<span class="n">config</span><span class="p">,</span> <span class="n">_PATH</span> <span class="o">=</span> <span class="n">loadConfig</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">_PATH</span></div>
 
 
 <div class="viewcode-block" id="read"><a class="viewcode-back" href="../utils.html#utils.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
@@ -116,10 +173,11 @@
 <span class="sd">        list: lines of the file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-    <span class="k">return</span> <span class="n">lines</span></div>
+    <span class="k">if</span> <span class="n">confirmFile</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">lines</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+            <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">lines</span></div>
 
 
 <div class="viewcode-block" id="write"><a class="viewcode-back" href="../utils.html#utils.write">[docs]</a><span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">new_name</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
@@ -131,9 +189,10 @@
 <span class="sd">        lines (list): list of the string to write</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">new_name</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">exf</span><span class="p">:</span>
-        <span class="n">exf</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
-        <span class="n">exf</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+    <span class="k">if</span> <span class="n">confirmPath</span><span class="p">(</span><span class="n">root</span><span class="p">):</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">new_name</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">exf</span><span class="p">:</span>
+            <span class="n">exf</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+            <span class="n">exf</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="getVars"><a class="viewcode-back" href="../utils.html#utils.getVars">[docs]</a><span class="k">def</span> <span class="nf">getVars</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
@@ -149,31 +208,44 @@
 <span class="sd">                - classes_file (list): the content of the file extracted from the regex</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1"># Get the extension and use as a flag e.g.: HTML, CSS...</span>
-    <span class="n">type_file</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">confirmFile</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
 
-    <span class="n">lines</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="c1"># Get the extension and use as a flag e.g.: HTML, CSS...</span>
+        <span class="n">ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+        <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">onlyName</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">fileroot</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">type_file</span> <span class="o">=</span> <span class="n">ext</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
 
-    <span class="c1"># Use the right regex to find the classes on the file</span>
-    <span class="n">classes_file</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;pattern&quot;</span> <span class="o">+</span> <span class="n">type_file</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
-    <span class="n">name</span><span class="p">,</span> <span class="n">ext</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
-    <span class="n">new_name</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;sufix&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">ext</span>
+        <span class="c1"># Use the right regex to find the classes on the file</span>
+        <span class="n">classes_file</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;pattern&quot;</span> <span class="o">+</span> <span class="n">type_file</span><span class="p">],</span> <span class="nb">str</span><span class="p">(</span><span class="n">lines</span><span class="p">))</span>
 
-    <span class="k">return</span> <span class="n">new_name</span><span class="p">,</span> <span class="n">classes_file</span></div>
+        <span class="k">if</span> <span class="ow">not</span> <span class="s1">&#39;.min&#39;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+            <span class="n">new_name</span> <span class="o">=</span> <span class="n">onlyName</span> <span class="o">+</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;sufix&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">ext</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;file: </span><span class="si">{filename}</span><span class="s1"> is a .min file&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">new_name</span><span class="p">,</span> <span class="n">classes_file</span></div>
 
 
-<div class="viewcode-block" id="lookFiles"><a class="viewcode-back" href="../utils.html#utils.lookFiles">[docs]</a><span class="k">def</span> <span class="nf">lookFiles</span><span class="p">():</span>
+<div class="viewcode-block" id="lookFiles"><a class="viewcode-back" href="../utils.html#utils.lookFiles">[docs]</a><span class="k">def</span> <span class="nf">lookFiles</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Look for the files to convert. Find all files with matching extensions out of config.json</span>
 
-<span class="sd">     - Use _PATH as the root.</span>
-<span class="sd">     - Ignore the dirs as specified in config[&#39;dirsIgnore&#39;]</span>
-<span class="sd">     - Select files with extensions as specified in config[&#39;filesSearch&#39;]</span>
-<span class="sd">     - Ignore files with extensions as specified in config[&#39;filesIgnore&#39;]</span>
+<span class="sd">        - Use _PATH as the root.</span>
+<span class="sd">        - Ignore the dirs as specified in config[&#39;dirsIgnore&#39;]</span>
+<span class="sd">        - Select files with extensions as specified in config[&#39;filesSearch&#39;]</span>
+<span class="sd">        - Ignore files with extensions as specified in config[&#39;filesIgnore&#39;]</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path (str): path to convert the files</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        list: list of tuples [(root, file)] of all the files founded (given the extension on config.json)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_PATH</span> <span class="o">=</span> <span class="n">confirmPath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
     <span class="n">search_files</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># Look for files</span>
@@ -325,7 +397,7 @@
                 <span class="c1"># look only the head lines - &#39;in&#39; for minimized files</span>
                 <span class="k">if</span> <span class="s2">&quot;&lt;/head&gt;&quot;</span> <span class="ow">in</span> <span class="n">single_line</span><span class="p">:</span>
                     <span class="k">break</span>
-                <span class="k">for</span> <span class="n">root</span><span class="p">,</span> <span class="n">css_file_name</span> <span class="ow">in</span> <span class="n">css_files</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">css_file_name</span> <span class="ow">in</span> <span class="n">css_files</span><span class="p">:</span>
                     <span class="c1"># if css_file_name in single_line and &#39;link&#39; in single_line:</span>
                     <span class="k">if</span> <span class="n">css_file_name</span> <span class="ow">in</span> <span class="n">single_line</span><span class="p">:</span>
 

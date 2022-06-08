@@ -1,7 +1,10 @@
 import os
 import re
 
-from src.utils import lookFiles, read
+from src.utils import lookFiles, read, loadPath, loadConfig
+
+
+_PATH = loadPath()
 
 
 def test_find_spaces_html():
@@ -30,7 +33,7 @@ def test_find_not_hashed_classes_html():
 
 
 def test_non_min_tags_html():
-    files = lookFiles()
+    files = lookFiles(_PATH)
     css_files = [file for _, file in files if file.endswith(".css")]
 
     for file in files:
@@ -51,9 +54,8 @@ def test_non_min_tags_html():
 
 ########## Test Functions ##########
 
-
 def find_spaces_html():
-    files = lookFiles()
+    files = lookFiles(_PATH)
     results = 0
 
     for file in files:
@@ -70,7 +72,7 @@ def find_spaces_html():
 
 
 def find_html_classes():
-    files = lookFiles()
+    files = lookFiles(_PATH)
     results = []
 
     for file in files:

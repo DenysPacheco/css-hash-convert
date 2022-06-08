@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>utils module &mdash; css-hash-convert 1.0.0 documentation</title>
+  <title>utils module &mdash; css-hash-convert 2.1.0 documentation</title>
       <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -67,6 +67,46 @@
              
   <section id="module-utils">
 <span id="utils-module"></span><h1>utils module<a class="headerlink" href="#module-utils" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.confirmFile">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">confirmFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#confirmFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.confirmFile" title="Permalink to this definition"></a></dt>
+<dd><p>Confirm if a path is a valid file path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>string</em>) – path to file</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>OSError</strong> – if path is not file or does not exists</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the same path, if valid</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.confirmPath">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">confirmPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#confirmPath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.confirmPath" title="Permalink to this definition"></a></dt>
+<dd><p>Confirm if a path is a valid directory path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>string</em>) – path to dir</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>OSError</strong> – if path is not dir or does not exists</p>
+</dd>
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>the same path, if valid</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>string</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.cssHash">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">cssHash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search_files</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#cssHash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.cssHash" title="Permalink to this definition"></a></dt>
@@ -168,27 +208,37 @@ Being the name, extension, new name and content (based on the proper regex) on t
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.loadConfig">
 <span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">loadConfig</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#loadConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.loadConfig" title="Permalink to this definition"></a></dt>
-<dd><p>Load initial configurations of the json file.</p>
+<dd><p>Initialize the config.json file and config var</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><dl class="simple">
-<dt>(config, _PATH)</dt><dd><ul class="simple">
-<li><p>config (dict): the vars of configurations</p></li>
-<li><p>_PATH (string): string of the root path</p></li>
-</ul>
-</dd>
-</dl>
-</p>
+<dd class="field-odd"><p>config dictionary</p>
 </dd>
 <dt class="field-even">Return type</dt>
-<dd class="field-even"><p>tuple</p>
+<dd class="field-even"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils.loadPath">
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">loadPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#loadPath"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.loadPath" title="Permalink to this definition"></a></dt>
+<dd><p>Loads the PATH to the dir with the files to convert</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em><em>, </em><em>optional</em>) – path of the dir (in config.json defaults to ‘examples’). Defaults to ‘’.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>the path of the dir to convert the files</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="utils.lookFiles">
-<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">lookFiles</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#lookFiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.lookFiles" title="Permalink to this definition"></a></dt>
+<span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">lookFiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/utils.html#lookFiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#utils.lookFiles" title="Permalink to this definition"></a></dt>
 <dd><p>Look for the files to convert. Find all files with matching extensions out of config.json</p>
 <blockquote>
 <div><ul class="simple">
@@ -199,11 +249,14 @@ Being the name, extension, new name and content (based on the proper regex) on t
 </ul>
 </div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>list of tuples [(root, file)] of all the files founded (given the extension on config.json)</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>str</em>) – path to convert the files</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>list</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of tuples [(root, file)] of all the files founded (given the extension on config.json)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list</p>
 </dd>
 </dl>
 </dd></dl>

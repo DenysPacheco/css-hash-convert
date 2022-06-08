@@ -1,6 +1,6 @@
 import os
 
-from src.utils import lookFiles
+from src.utils import lookFiles, loadPath
 
 
 def pytest_configure():
@@ -10,6 +10,6 @@ def pytest_configure():
 
 def test_getMinFiles():
     assert pytest_configure()
-    for root, file in lookFiles():
+    for root, file in lookFiles(loadPath):
         print(os.path.join(root, file), end=" - ")
         assert ".min" in file

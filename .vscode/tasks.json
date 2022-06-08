@@ -39,5 +39,11 @@
             "command": "sphinx-apidoc -fo docs/source/ src/ && cd docs && make html",
             "problemMatcher": []
         },
+        {
+            "label": "Make FULL Build",
+            "type": "shell",
+            "command": "scripts/full-build.sh",
+            "problemMatcher": []
+        },
     ]
 }

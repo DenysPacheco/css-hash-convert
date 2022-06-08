@@ -7,13 +7,51 @@ import string
 from os.path import isfile, join
 
 
-def loadConfig():
-    """Load initial configurations of the json file.
+def confirmPath(path):
+    """Confirm if a path is a valid directory path.
+
+    Args:
+        path (string): path to dir
+
+    Raises:
+        OSError: if path is not dir or does not exists
 
     Returns:
-        tuple: (config, _PATH)
-                - config (dict): the vars of configurations
-                - _PATH (string): string of the root path
+        string: the same path, if valid
+    """
+
+    if not os.path.isdir(path):
+        raise OSError(
+            f'{path}: Path is not a directory path or it does not exists.')
+
+    return path
+
+
+def confirmFile(path):
+    """Confirm if a path is a valid file path.
+
+    Args:
+        path (string): path to file
+
+    Raises:
+        OSError: if path is not file or does not exists
+
+    Returns:
+        str: the same path, if valid
+    """
+
+    if not os.path.isfile(path):
+        raise OSError(
+            f'{path}: Path is not a file path or it does not exists.')
+
+    return path
+
+
+def loadConfig():
+    """Initialize the config.json file and config var
+
+    Returns:
+        dict: config dictionary
     """
 
     # Side tweak to fix file path for testing (and running script and build docs)
@@ -26,20 +64,39 @@ def loadConfig():
     if not os.path.exists(_localdir + '/config.json'):
         global config
     else:
+
         # Load config.json
         with open(f"{_localdir}/config.json") as json_data_file:
             config = json.load(json_data_file)
 
-    # Configure the PATH arg to run the script on
-    if config["dirsSearch"]:
-        _PATH = os.getcwd() + "/" + str(config["dirsSearch"][0]) + "/"
+    return config
+
+
+def loadPath(path=''):
+    """Loads the PATH to the dir with the files to convert
+
+    Args:
+        path (str, optional): path of the dir (in config.json defaults to 'examples'). Defaults to ''.
+
+    Returns:
+        str: the path of the dir to convert the files
+    """
+
+    # Doesn't need load for the config in main loads in the global scope
+    # But it does have to put on the tests
+    config = loadConfig()
+
+    if path:
+        _PATH = confirmPath(path)
     else:
-        _PATH = os.getcwd() + "/"
 
-    return config, _PATH
+        # Configure the PATH arg to run the script on
+        if config["dirsSearch"]:
+            _PATH = os.getcwd() + "/" + str(config["dirsSearch"][0]) + "/"
+        else:
+            _PATH = os.getcwd() + "/"
 
-
-config, _PATH = loadConfig()
+    return _PATH
 
 
 def read(file):
@@ -52,10 +109,11 @@ def read(file):
         list: lines of the file
     """
 
-    with open(file, "r") as f:
-        lines = f.readlines()
-        f.close()
-    return lines
+    if confirmFile(file):
+        with open(file, "r") as f:
+            lines = f.readlines()
+            f.close()
+        return lines
 
 
 def write(root, new_name, lines):
@@ -67,9 +125,10 @@ def write(root, new_name, lines):
         lines (list): list of the string to write
     """
 
-    with open(os.path.join(root, new_name), "w") as exf:
-        exf.writelines(lines)
-        exf.close()
+    if confirmPath(root):
+        with open(os.path.join(root, new_name), "w") as exf:
+            exf.writelines(lines)
+            exf.close()
 
 
 def getVars(file):
@@ -85,31 +144,44 @@ def getVars(file):
                 - classes_file (list): the content of the file extracted from the regex
     """
 
-    # Get the extension and use as a flag e.g.: HTML, CSS...
-    type_file = file.split(".")[1].upper()
+    if confirmFile(file):
 
-    lines = read(file)
+        # Get the extension and use as a flag e.g.: HTML, CSS...
+        ext = os.path.splitext(file)[1].replace('.', '')
+        filename = os.path.basename(file)
+        onlyName = filename.split('.')[0]
+        fileroot = os.path.dirname(file)
+        type_file = ext.upper()
 
-    # Use the right regex to find the classes on the file
-    classes_file = re.findall(config["pattern" + type_file], str(lines))
+        lines = read(file)
 
-    name, ext = file.split(".")
-    new_name = name + config["sufix"] + "." + ext
+        # Use the right regex to find the classes on the file
+        classes_file = re.findall(config["pattern" + type_file], str(lines))
 
-    return new_name, classes_file
+        if not '.min' in filename:
+            new_name = onlyName + config["sufix"] + '.' + ext
+        else:
+            raise Exception(f'file: {filename} is a .min file')
+
+        return new_name, classes_file
 
 
-def lookFiles():
+def lookFiles(path):
     """Look for the files to convert. Find all files with matching extensions out of config.json
 
-     - Use _PATH as the root.
-     - Ignore the dirs as specified in config['dirsIgnore']
-     - Select files with extensions as specified in config['filesSearch']
-     - Ignore files with extensions as specified in config['filesIgnore']
+        - Use _PATH as the root.
+        - Ignore the dirs as specified in config['dirsIgnore']
+        - Select files with extensions as specified in config['filesSearch']
+        - Ignore files with extensions as specified in config['filesIgnore']
+
+    Args:
+        path (str): path to convert the files
 
     Returns:
         list: list of tuples [(root, file)] of all the files founded (given the extension on config.json)
     """
+
+    _PATH = confirmPath(path)
 
     search_files = []
     # Look for files
@@ -261,7 +333,7 @@ def htmlHash(search_files, classes_dict, css_files):
                 # look only the head lines - 'in' for minimized files
                 if "</head>" in single_line:
                     break
-                for root, css_file_name in css_files:
+                for _, css_file_name in css_files:
                     # if css_file_name in single_line and 'link' in single_line:
                     if css_file_name in single_line:
 

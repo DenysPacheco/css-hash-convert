@@ -1,18 +1,25 @@
-from utils import cssHash, htmlHash, loadConfig, lookFiles
+from utils import cssHash, htmlHash, loadConfig, loadPath, lookFiles
 
 import os
-
-config, _ = loadConfig()
-
-search_files = lookFiles()
+import sys
 
 
-def main():
+def main(args):
     """Main function to run the script.
     More details explained on the `functions` docs
     """
 
-    search_files = lookFiles()
+    # Load config before path for the global variable scope
+    config = loadConfig()
+
+    if args:
+        _PATH = loadPath(args[0])
+    else:
+        _PATH = loadPath()
+
+    _PATH = os.path.realpath(_PATH)
+
+    search_files = lookFiles(_PATH)
 
     if search_files:
 
@@ -46,4 +53,4 @@ def main():
 ################ Main ################
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])
