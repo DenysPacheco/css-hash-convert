@@ -1,6 +1,6 @@
 # Css Hashfy & Minify Converter ♻️
 
-![Hashfyer Banner](assets/images/banner.webp)
+![Hashfier Banner](assets/images/banner.webp)
 
 This is a **Python** script to **hashfy & minify** css classes and html tags.
 
@@ -25,7 +25,7 @@ It was inspired on Google's approach to minimize class names for faster loading 
 - [x] Make a random hash **each run** out of css and id classes (see [overwrite](#overwrite-note))
 - [x] Minify css and html files
 - [x] Remove comments 👌
-- [x] Create `.min` sufixed files as output
+- [x] Create `.min` suffixed files as output
 - [x] Auto apply changes for all the html files (class subst and style link tags)
 - [x] Multiple files on multiple folders (top-down) ✨
 
@@ -41,9 +41,9 @@ Alternatively...
 - [functions.py](src/functions.py)
 - [config.json](src/config.json)
 
-It will search for all the files with the matching extensions and on the subfolders marked on the [configuration file](src/config.json) and do the changes. (default `.html` and `.css`)
+It will search for all the files with the matching extensions and on the sub-folders marked on the [configuration file](src/config.json) and do the changes. (default `.html` and `.css`)
 
-It will give the output with `foo.min.html` and `foo.min.css` on the same directorie as the original ones.
+It will give the output with `foo.min.html` and `foo.min.css` on the same directories as the original ones.
 
 ## 📄 Documentation
 
@@ -51,7 +51,7 @@ Also, if you want to see the functions or read the code (more hardcore 🤨) use
 
 ## ⚙️ Configure
 
-Change in the [configuration file](src/config.json) the directories to be ignored, hash length, overwrite files and others. (On the [convert.min.py](src/convert.min.py) the configurations are in the beggining of the file)
+Change in the [configuration file](src/config.json) the directories to be ignored, hash length, overwrite files and others. (On the [convert.min.py](src/convert.min.py) the configurations are in the beginning of the file)
 
 ### Configuration options
 
@@ -61,7 +61,7 @@ Change in the [configuration file](src/config.json) the directories to be ignore
 | filesIgnore         | Extensions of the files to ignore          |
 | dirsSearch          | Directories to do the search               |
 | dirsIgnore          | Directories to ignore on the search        |
-| sufix               | Sufix of the outputed files                |
+| suffix              | Suffix of the output files                 |
 | prefix              | Prefix of the css classes                  |
 | patternCSS          | Regex of the css to take classes and ids   |
 | patternHTML         | Regex of the html to take the classes      |
@@ -70,7 +70,7 @@ Change in the [configuration file](src/config.json) the directories to be ignore
 | patternHTMLLinks    | Regex to remove the html link              |
 | patternHTMLLinksAlt | Alternative Regex to remove the html links |
 | patternHTMLHead     | Regex to find the html head tag            |
-| hashLength          | Lenght of the hash                         |
+| hashLength          | Length of the hash                         |
 | overwriteFiles      | Overwrite the output files                 |
 | minimize            | Minimize the files                         |
 | console             | Print console output                       |
