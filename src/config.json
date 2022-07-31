@@ -1,33 +1,33 @@
 {
-    "filesSearch": [
-        ".html",
-        ".css"
-    ],
-    "filesIgnore": [
-        ".min"
-    ],
-    "dirsSearch": [
-        "examples"
-    ],
-    "dirsIgnore": [
-        ".",
-        "packages",
-        "src",
-        "dist",
-        "build",
-        "source"
-    ],
-    "sufix": ".min",
-    "prefix": "_",
-    "patternCSS": "[\\.\\#]-?([_a-zA-Z]+[_a-zA-Z0-9-]*)\\s*\\{",
-    "patternHTML": "class[\t]*=[\t]*\"[^\"]+",
-    "patternCSSClear": "\\/\\*.*\\*\\/",
-    "patternHTMLClear": "[^><a-zA-Z0-9\"',._-] ( *)|(<!--(.*?)-->)",
-    "patternHTMLLinks": "(?<=<link).*(?<=href..)(?!http)(\\S+)(?=\"|\\')",
-    "patternHTMLLinksAlt": "(?<=<link)(.href=\"|\\')(?!http)(\\S+)(?=\"|\\')",
-    "patternHTMLHead": "<head>(?:.|\\n|\\r)+?</head>",
-    "hashLength": 6,
-    "overwriteFiles": true,
-    "minimize": true,
-    "console": true
+  "filesSearch": [
+    ".html",
+    ".css"
+  ],
+  "filesIgnore": [
+    ".min"
+  ],
+  "dirsSearch": [
+    "examples"
+  ],
+  "dirsIgnore": [
+    ".",
+    "packages",
+    "src",
+    "dist",
+    "build",
+    "source"
+  ],
+  "sufix": ".min",
+  "prefix": "_",
+  "patternCSS": "[\\.\\#]-?([_a-zA-Z]+[_a-zA-Z0-9-]*)\\s*\\{",
+  "patternHTML": "class[\t]*=[\t]*\"[^\"]+",
+  "patternCSSClear": "\\/\\*.*\\*\\/",
+  "patternHTMLClear": "[^><a-zA-Z0-9\"',._-] ( *)|(<!--(.*?)-->)",
+  "patternHTMLLinks": "(?<=<link).*(?<=href..)(?!http)(\\S+)(?=\"|\\')",
+  "patternHTMLLinksAlt": "(?<=<link)(.href=\"|\\')(?!http)(\\S+)(?=\"|\\')",
+  "patternHTMLHead": "<head>(?:.|\\n|\\r)+?</head>",
+  "hashLength": 6,
+  "overwriteFiles": true,
+  "minimize": true,
+  "console": true
 }
