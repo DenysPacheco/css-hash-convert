@@ -6,13 +6,13 @@
     {
       "label": "Run Converter",
       "type": "shell",
-      "command": "python3 src/convert.py",
+      "command": ".venv/bin/python  src/convert.py",
       "problemMatcher": []
     },
     {
       "label": "Runs tests",
       "type": "shell",
-      "command": "pytest",
+      "command": ".venv/bin/pytest",
       "problemMatcher": []
     },
     {
@@ -36,7 +36,7 @@
     {
       "label": "Make Docs",
       "type": "shell",
-      "command": "pwd && sphinx-apidoc -fo docs/source/ src/ && cd docs && make html",
+      "command": "source .venv/bin/activate && .venv/bin/sphinx-apidoc -fo docs/source/ src/ && cd docs && make html && cd .. && deactivate",
       "problemMatcher": []
     },
     {
@@ -44,6 +44,6 @@
       "type": "shell",
       "command": "scripts/full-build.sh",
       "problemMatcher": []
-    },
+    }
   ]
 }

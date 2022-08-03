@@ -1,8 +1,8 @@
 echo -e 'Cleaning...\n' &&
 
-rm -rfv examples/*.min*; rm -rfv examples/*/*.min*; rm -rfv __pycache__/ .pytest_cache/; rm tempCodeRunnerFile.py &&
+source scripts/del_minis.sh &&
 
-scripts/del_pycache.sh;
+source scripts/del_pycache.sh;
 
 echo -e 'Starting Full build...\n' &&
 

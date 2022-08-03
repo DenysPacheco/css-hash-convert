@@ -1,0 +1,7 @@
+convert.min module
+==================
+
+.. automodule:: convert.min
+    :members:
+    :undoc-members:
+    :show-inheritance:

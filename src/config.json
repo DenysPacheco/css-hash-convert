@@ -17,7 +17,7 @@
     "build",
     "source"
   ],
-  "sufix": ".min",
+  "suffix": ".min",
   "prefix": "_",
   "patternCSS": "[\\.\\#]-?([_a-zA-Z]+[_a-zA-Z0-9-]*)\\s*\\{",
   "patternHTML": "class[\t]*=[\t]*\"[^\"]+",

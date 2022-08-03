@@ -3,37 +3,37 @@
 #################### Configurations ####################
 
 config = {
-    "filesSearch": [
-        ".html",
-        ".css"
-    ],
-    "filesIgnore": [
-        ".min"
-    ],
-    "dirsSearch": [
-        "examples"
-    ],
-    "dirsIgnore": [
-        ".",
-        "packages",
-        "src",
-        "dist",
-        "build",
-        "source"
-    ],
-    "sufix": ".min",
-    "prefix": "_",
-    "patternCSS": "[\\.\\#]-?([_a-zA-Z]+[_a-zA-Z0-9-]*)\\s*\\{",
-    "patternHTML": "class[\t]*=[\t]*\"[^\"]+",
-    "patternCSSClear": "\\/\\*.*\\*\\/",
-    "patternHTMLClear": "[^><a-zA-Z0-9\"',._-] ( *)|(<!--(.*?)-->)",
-    "patternHTMLLinks": "(?<=<link).*(?<=href..)(?!http)(\\S+)(?=\"|\\')",
-    "patternHTMLLinksAlt": "(?<=<link)(.href=\"|\\')(?!http)(\\S+)(?=\"|\\')",
-    "patternHTMLHead": "<head>(?:.|\\n|\\r)+?</head>",
-    "hashLength": 6,
-    "overwriteFiles": True,
-    "minimize": True,
-    "console": True
+  "filesSearch": [
+    ".html",
+    ".css"
+  ],
+  "filesIgnore": [
+    ".min"
+  ],
+  "dirsSearch": [
+    "examples"
+  ],
+  "dirsIgnore": [
+    ".",
+    "packages",
+    "src",
+    "dist",
+    "build",
+    "source"
+  ],
+  "suffix": ".min",
+  "prefix": "_",
+  "patternCSS": "[\\.\\#]-?([_a-zA-Z]+[_a-zA-Z0-9-]*)\\s*\\{",
+  "patternHTML": "class[\t]*=[\t]*\"[^\"]+",
+  "patternCSSClear": "\\/\\*.*\\*\\/",
+  "patternHTMLClear": "[^><a-zA-Z0-9\"',._-] ( *)|(<!--(.*?)-->)",
+  "patternHTMLLinks": "(?<=<link).*(?<=href..)(?!http)(\\S+)(?=\"|\\')",
+  "patternHTMLLinksAlt": "(?<=<link)(.href=\"|\\')(?!http)(\\S+)(?=\"|\\')",
+  "patternHTMLHead": "<head>(?:.|\\n|\\r)+?</head>",
+  "hashLength": 6,
+  "overwriteFiles": True,
+  "minimize": True,
+  "console": True
 }
 
 
@@ -52,7 +52,7 @@ def confirmPath(path):
     """Confirm if a path is a valid directory path.
 
     Args:
-        path (string): path to dir
+        path (str): path to dir
 
     Raises:
         OSError: if path is not dir or does not exists
@@ -72,7 +72,7 @@ def confirmFile(path):
     """Confirm if a path is a valid file path.
 
     Args:
-        path (string): path to file
+        path (str): path to file
 
     Raises:
         OSError: if path is not file or does not exists
@@ -96,21 +96,19 @@ def loadConfig():
     """
 
     # Side tweak to fix file path for testing (and running script and build docs)
-    if 'test' in os.path.basename(sys.path[0]):
-        _localdir = os.path.dirname(sys.path[0]) + '/src'
+    if not 'src' == os.path.basename(sys.path[0]):
+        _localdir = os.path.join(sys.path[0], 'src')
     else:
         _localdir = sys.path[0]
 
     # if there is no config file (then it's .min), get the global config var for converter.min.py
-    if not os.path.exists(_localdir + '/config.json'):
+    if not os.path.exists(os.path.join(_localdir, 'config.json')):
         global config
     else:
-
         # Load config.json
-        with open(f"{_localdir}/config.json") as json_data_file:
+        with open(f"{os.path.join(_localdir, 'config.json')}") as json_data_file:
             config = json.load(json_data_file)
-
-    return config
+            return config
 
 
 def loadPath(path=''):
@@ -133,9 +131,9 @@ def loadPath(path=''):
 
         # Configure the PATH arg to run the script on
         if config["dirsSearch"]:
-            _PATH = os.getcwd() + "/" + str(config["dirsSearch"][0]) + "/"
+            _PATH = os.path.join(os.getcwd(), str(config["dirsSearch"][0]))
         else:
-            _PATH = os.getcwd() + "/"
+            _PATH = os.getcwd()
 
     return _PATH
 
@@ -144,7 +142,7 @@ def read(file):
     """Basic functions to read contents of files.
 
     Args:
-        file (string): path of the file
+        file (str): path of the file
 
     Returns:
         list: lines of the file
@@ -158,11 +156,11 @@ def read(file):
 
 
 def write(root, new_name, lines):
-    """Basic funtions to write in a file.
+    """Basic functions to write in a file.
 
     Args:
-        root (string): path of the root for the file
-        new_name (string): new name of the file
+        root (str): path of the root for the file
+        new_name (str): new name of the file
         lines (list): list of the string to write
     """
 
@@ -177,11 +175,11 @@ def getVars(file):
     Being the name, extension, new name and content (based on the proper regex) on the file.
 
     Args:
-        file (string): path to the file
+        file (str): path to the file
 
     Returns:
         tuple: (new_name, classes_file)
-                - new_name (string): the new name with the minifier extension
+                - new_name (str): the new name with the minifier extension
                 - classes_file (list): the content of the file extracted from the regex
     """
 
@@ -191,7 +189,6 @@ def getVars(file):
         ext = os.path.splitext(file)[1].replace('.', '')
         filename = os.path.basename(file)
         onlyName = filename.split('.')[0]
-        fileroot = os.path.dirname(file)
         type_file = ext.upper()
 
         lines = read(file)
@@ -200,7 +197,7 @@ def getVars(file):
         classes_file = re.findall(config["pattern" + type_file], str(lines))
 
         if not '.min' in filename:
-            new_name = onlyName + config["sufix"] + '.' + ext
+            new_name = onlyName + config["suffix"] + '.' + ext
         else:
             raise Exception(f'file: {filename} is a .min file')
 
@@ -227,7 +224,7 @@ def lookFiles(path):
     search_files = []
     # Look for files
     for root, subdirectories, files in os.walk(_PATH):
-        # Comprehension to break outter loop
+        # Comprehension to break outer loop
         if any(
             [dirsIgnore for dirsIgnore in config["dirsIgnore"] if dirsIgnore in root]
         ):
@@ -248,12 +245,12 @@ def getFiles(search_files, extension):
 
     Args:
         search_files (list): list of all files searched
-        extension (string): extension type
+        extension (str): extension type
 
     Returns:
         list: list of tuples [(root, file)] of the selected extension
-                - root (string): root path for the file (without the filename) 
-                - file (string): filename
+                - root (str): root path for the file (without the filename) 
+                - file (str): filename
     """
 
     type_files = [
@@ -291,7 +288,7 @@ def cssHash(search_files):
         # If the file doesn't exist, create a new one
         if config["overwriteFiles"] or not isfile(join(root, new_name)):
 
-            # Create the dictionary with the classe's hashes of the CSS
+            # Create the dictionary with the classes hashes of the CSS
             for css_class in classes:
                 name_hash_file = "-".join([file_name, css_class])
                 hash_number = ""
@@ -331,7 +328,7 @@ def cssHash(search_files):
             write(root, new_name, lines)
             count += 1
             if config["console"]:
-                print(f"{10*'*'} \t {new_name.split('/')[-1]} \t {10*'*'}")
+                print(f"{10*'*'} \t {new_name.split('/')[-1]}   \t {10*'*'}")
 
         # If it exists, pass
         else:
@@ -369,7 +366,7 @@ def htmlHash(search_files, classes_dict, css_files):
         if config["overwriteFiles"] or not isfile(join(root, new_name)):
             css_found = set()
 
-            # Seach only the files (set) contained by the html
+            # Search only the files (set) contained by the html
             for index, single_line in enumerate(lines):
                 # look only the head lines - 'in' for minimized files
                 if "</head>" in single_line:
@@ -386,7 +383,7 @@ def htmlHash(search_files, classes_dict, css_files):
 
                         single_line = single_line.replace(
                             css_file_name,
-                            f"{css_file_name.split('.')[0]}{config['sufix']}.css",
+                            f"{css_file_name.split('.')[0]}{config['suffix']}.css",
                         )
 
                         lines[index] = single_line

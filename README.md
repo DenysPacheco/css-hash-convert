@@ -41,7 +41,11 @@ Alternatively...
 - [functions.py](src/functions.py)
 - [config.json](src/config.json)
 
-It will search for all the files with the matching extensions and on the sub-folders marked on the [configuration file](src/config.json) and do the changes. (default `.html` and `.css`)
+You can run the python script and pass as args the source folder for the conversion.
+
+`python convert.py ./templates/`
+
+It will search for all the files with the matching extensions in the sub-folders marked on the [configuration file](src/config.json) and do the changes. (default `.html` and `.css`)
 
 It will give the output with `foo.min.html` and `foo.min.css` on the same directories as the original ones.
 
